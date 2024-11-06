@@ -22,9 +22,9 @@ router.get("/:id", (req, res, next) => {
     return p.id === placeId;
   });
   if (!place) {
-    const error = new Error("ID NO TROUVER");
+    const error = new Error("ID NON TROUVÉ");
     error.code = 404;
-    next(error);
+    return next(error);
   }
   res.json({ place });
 });
@@ -35,7 +35,7 @@ router.get("/user/:uid", (req, res, next) => {
     return p.creator === userId;
   });
   if (!place) {
-    const error = new Error("ID NO TROUVER");
+    const error = new Error("ID NON TROUVÉ");
     error.code = 404;
     return next(error);
   }
