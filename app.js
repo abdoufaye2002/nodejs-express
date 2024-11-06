@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const placesRoutes = require("./routes/places-routes");
 const port = 3000;
-
+app.use(bodyParser.json());
 app.use("/api/place", placesRoutes);
 
 app.use((error, req, res, next) => {
