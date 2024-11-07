@@ -32,7 +32,7 @@ const getPlaceUsersById = (req, res, next) => {
     return p.creator === userId;
   });
   if (!place) {
-    return next(new HttpError("ID NON TROUVÉ", 404));
+    return next(new HttpError("PLACE NON TROUVÉ", 404));
   }
   res.json({ place });
 };
@@ -50,7 +50,25 @@ const createPlace = (req, res, next) => {
   res.status(201).json({ place: createdPlace });
   console.log(DUMMY_PLACES);
 };
-
+const updatePlace = (req, res, next) => {
+  const { title, description } = req.body;
+  const placeId = req.params.id;
+  const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
+  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+  DUMMY_PLACES[placeIndex] = updatedPlace;
+  res.status(201).json({ place: updatedPlace });
+  console.log(updatedPlace);
+};
+const deletePlace = (req, res, next) => {
+  const placeId = req.params.id;
+  const placeDelete = DUMMY_PLACES.filter((p) => p.id !== placeId);
+  res.status(201).json({ message: "message supprimer" });
+  console.log(placeDelete);
+};
 exports.getPlaceById = getPlaceById;
 exports.getPlaceUsersById = getPlaceUsersById;
 exports.createPlace = createPlace;
+exports.deletePlace = deletePlace;
+exports.updatePlace = updatePlace;

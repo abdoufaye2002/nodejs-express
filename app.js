@@ -2,9 +2,15 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const placesRoutes = require("./routes/places-routes");
+const HttpError = require("./models/http-error");
 const port = 3000;
 app.use(bodyParser.json());
 app.use("/api/place", placesRoutes);
+
+app.use((req, res, next) => {
+  const error = new HttpError("DONNEES NON TROUVER", 404);
+  throw error;
+});
 
 app.use((error, req, res, next) => {
   if (res.headerSent) {
