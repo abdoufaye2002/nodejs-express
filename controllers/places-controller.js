@@ -1,7 +1,7 @@
 const HttpError = require("../models/http-error");
 const { v4: uuidv4 } = require("uuid");
 
-const DUMMY_PLACES = [
+let DUMMY_PLACES = [
   {
     id: "p1",
     title: "Empiree",
@@ -26,15 +26,15 @@ const getPlaceById = (req, res, next) => {
   res.json({ place });
 };
 
-const getPlaceUsersById = (req, res, next) => {
+const getPlacesUsersById = (req, res, next) => {
   const userId = req.params.uid;
-  const place = DUMMY_PLACES.find((p) => {
+  const places = DUMMY_PLACES.filter((p) => {
     return p.creator === userId;
   });
-  if (!place) {
-    return next(new HttpError("PLACE NON TROUVÉ", 404));
+  if (!places || places.length === 0) {
+    return next(new HttpError("PLACES NON TROUVÉS", 404));
   }
-  res.json({ place });
+  res.json({ places });
 };
 const createPlace = (req, res, next) => {
   const { title, description, coordinates, address, creator } = req.body;
@@ -68,7 +68,7 @@ const deletePlace = (req, res, next) => {
   console.log(placeDelete);
 };
 exports.getPlaceById = getPlaceById;
-exports.getPlaceUsersById = getPlaceUsersById;
+exports.getPlacesUsersById = getPlacesUsersById;
 exports.createPlace = createPlace;
 exports.deletePlace = deletePlace;
 exports.updatePlace = updatePlace;
