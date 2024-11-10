@@ -40,7 +40,6 @@ const getPlacesUsersById = (req, res, next) => {
 const createPlace = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors);
     throw new HttpError("L'entrer est invalide!", 422);
   }
   const { title, description, coordinates, address, creator } = req.body;
@@ -57,6 +56,10 @@ const createPlace = (req, res, next) => {
   console.log(DUMMY_PLACES);
 };
 const updatePlace = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    throw new HttpError("L'entrer est invalide!", 422);
+  }
   const { title, description } = req.body;
   const placeId = req.params.id;
   const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
@@ -69,8 +72,11 @@ const updatePlace = (req, res, next) => {
 };
 const deletePlace = (req, res, next) => {
   const placeId = req.params.id;
+  if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
+    throw new HttpError("Lieu non trouve", 422);
+  }
   const placeDelete = DUMMY_PLACES.filter((p) => p.id !== placeId);
-  res.status(201).json({ message: "message supprimer" });
+  res.status(201).json({ message: "Lieu supprimer" });
   console.log(placeDelete);
 };
 exports.getPlaceById = getPlaceById;
