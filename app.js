@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const mongoose = require("mongoose");
+
 const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
@@ -22,7 +24,13 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "erreur non connu" });
 });
 
-app.listen(3000, () => {
-  console.log(`http://localhost:${port}`);
-});
-//
+mongoose
+  .connect(
+    "mongodb+srv://manu:academy-123@cluster0.obgvk.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0"
+  )
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
