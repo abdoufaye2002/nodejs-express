@@ -1,7 +1,7 @@
 const HttpError = require("../models/http-error");
 const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
-const getCoordsForAddress = require("../util/location");
+// const getCoordsForAddress = require("../util/location");
 const Place = require("../models/places");
 
 let DUMMY_PLACES = [
@@ -18,11 +18,15 @@ let DUMMY_PLACES = [
   },
 ];
 
-const getPlaceById = (req, res, next) => {
+const getPlaceById = async (req, res, next) => {
   const placeId = req.params.id;
-  const place = DUMMY_PLACES.find((p) => {
-    return p.id === placeId;
-  });
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError("place non trouver", 500);
+    return next(error);
+  }
   if (!place) {
     throw new HttpError("ID NON TROUVÉ", 404);
   }
