@@ -39,18 +39,52 @@ const getPlacesUsersById = (req, res, next) => {
   }
   res.json({ places });
 };
+// const createPlace = async (req, res, next) => {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return next(new HttpError("L'entrer est invalide!", 422));
+//   }
+//   const { title, description, address, creator } = req.body;
+//   let coordinates;
+//   try {
+//     coordinates = await getCoordsForAddress(address);
+//   } catch (error) {
+//     return next(error);
+//   }
+
+//   const createdPlace = new Place({
+//     title,
+//     description,
+//     address,
+//     location: coordinates,
+//     image:
+//       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg",
+//     creator,
+//   });
+//   try {
+//     createPlace.save();
+//   } catch (err) {
+//     const error = new HttpError(
+//       "Echec de creation de lieu, essaie a nouveau!",
+//       500
+//     );
+//     return next(error);
+//   }
+//   res.status(201).json({ place: createdPlace });
+// };
+
 const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return next(new HttpError("L'entrer est invalide!", 422));
+    return next(new HttpError("L'entrée est invalide!", 422));
   }
   const { title, description, address, creator } = req.body;
-  let coordinates;
-  try {
-    coordinates = await getCoordsForAddress(address);
-  } catch (error) {
-    return next(error);
-  }
+
+  // Simuler des coordonnées aléatoires
+  const coordinates = {
+    lat: (Math.random() * 180 - 90).toFixed(6), // Latitude entre -90 et 90
+    lng: (Math.random() * 360 - 180).toFixed(6), // Longitude entre -180 et 180
+  };
 
   const createdPlace = new Place({
     title,
@@ -61,17 +95,20 @@ const createPlace = async (req, res, next) => {
       "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg",
     creator,
   });
+
   try {
-    createPlace.save();
+    await createdPlace.save(); // Assurez-vous d'attendre cette opération
   } catch (err) {
     const error = new HttpError(
-      "Echec de creation de lieu, essaie a nouveau!",
+      "Échec de la création de lieu, essaie à nouveau!",
       500
     );
     return next(error);
   }
+
   res.status(201).json({ place: createdPlace });
 };
+
 const updatePlace = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
