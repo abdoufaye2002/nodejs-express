@@ -31,7 +31,7 @@ const getPlaceById = async (req, res, next) => {
     const error = new HttpError("ID NON TROUVÉ", 404);
     next(error);
   }
-  res.json({ place });
+  res.json({ place: place.toObject({ getters: true }) });
 };
 
 const getPlacesUsersById = (req, res, next) => {
