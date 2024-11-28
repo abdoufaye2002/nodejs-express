@@ -28,7 +28,8 @@ const getPlaceById = async (req, res, next) => {
     return next(error);
   }
   if (!place) {
-    throw new HttpError("ID NON TROUVÉ", 404);
+    const error = new HttpError("ID NON TROUVÉ", 404);
+    next(error);
   }
   res.json({ place });
 };
