@@ -36,7 +36,13 @@ const getPlaceById = async (req, res, next) => {
 
 const getPlacesByUserId = (req, res, next) => {
   const userId = req.params.uid;
-  const places = Place.find({ creator: userId });
+  let places;
+  try {
+    places = Place.find({ creator: userId });
+  } catch (err) {
+    const error = HttpError("Createurs non trouver!!(probleme interne)", 500);
+    return next(error);
+  }
   if (!places || places.length === 0) {
     return next(new HttpError("PLACES NON TROUVÉS", 404));
   }
