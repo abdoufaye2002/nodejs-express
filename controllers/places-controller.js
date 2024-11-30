@@ -44,7 +44,8 @@ const getPlacesByUserId = async (req, res, next) => {
     return next(error);
   }
   if (!places || places.length === 0) {
-    return next(new HttpError("PLACES NON TROUVÉS", 404));
+    const error = HttpError("Lieu non trouver", 404);
+    return next(error);
   }
   res.json({ places });
 };
