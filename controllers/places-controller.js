@@ -31,14 +31,12 @@ const getPlaceById = async (req, res, next) => {
     const error = new HttpError("ID NON TROUVÉ", 404);
     next(error);
   }
-  res.json({ place: place.toObject({ getters: true }) });
+  res.json({ place: place.toObject({ getters: true }) }); // La méthode .toObject() de Mongoose permet de convertir cet objet enrichi en un objet JavaScript classique (comme celui qu’on utilise normalement).
 };
 
-const getPlacesUsersById = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
   const userId = req.params.uid;
-  const places = DUMMY_PLACES.filter((p) => {
-    return p.creator === userId;
-  });
+  const places = Place.find({ creator: userId });
   if (!places || places.length === 0) {
     return next(new HttpError("PLACES NON TROUVÉS", 404));
   }
@@ -139,7 +137,7 @@ const deletePlace = (req, res, next) => {
   console.log(placeDelete);
 };
 exports.getPlaceById = getPlaceById;
-exports.getPlacesUsersById = getPlacesUsersById;
+exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
 exports.deletePlace = deletePlace;
-exports.updatePlace = updatePlace; //
+exports.updatePlace = updatePlace;
