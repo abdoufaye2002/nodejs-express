@@ -34,11 +34,11 @@ const getPlaceById = async (req, res, next) => {
   res.json({ place: place.toObject({ getters: true }) }); // La méthode .toObject() de Mongoose permet de convertir cet objet enrichi en un objet JavaScript classique (comme celui qu’on utilise normalement).
 };
 
-const getPlacesByUserId = (req, res, next) => {
+const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
   let places;
   try {
-    places = Place.find({ creator: userId });
+    places = await Place.find({ creator: userId });
   } catch (err) {
     const error = HttpError("Createurs non trouver!!(probleme interne)", 500);
     return next(error);
