@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const app = express();
 const mongoose = require("mongoose");
 
@@ -7,30 +6,40 @@ const placesRoutes = require("./routes/places-routes");
 const usersRoutes = require("./routes/users-routes");
 const HttpError = require("./models/http-error");
 const port = 3000;
-app.use(bodyParser.json());
+
+// Middleware pour parser les données JSON
+app.use(express.json());
+
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
 
+// Gestion des routes non trouvées
 app.use((req, res, next) => {
-  const error = new HttpError("DONNEES NON TROUVER", 404);
+  const error = new HttpError("DONNEES NON TROUVÉES", 404);
   throw error;
 });
 
+// Gestion des erreurs
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
   }
   res.status(error.code || 500);
-  res.json({ message: error.message || "erreur non connu" });
+  res.json({ message: error.message || "Erreur non connue" });
 });
 
+// Connexion à MongoDB et démarrage du serveur
 mongoose
   .connect(
     "mongodb+srv://placesUsers:Rci6UkFbs4IuF1N9@cluster0.obgvk.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0"
   )
   .then(() => {
-    app.listen(3000);
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
   })
   .catch((err) => {
-    console.log(err);
+    console.error("Erreur de connexion à MongoDB : ", err);
   });
+
+//app
