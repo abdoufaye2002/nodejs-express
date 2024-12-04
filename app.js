@@ -41,5 +41,3 @@ mongoose
   .catch((err) => {
     console.error("Erreur de connexion à MongoDB : ", err);
   });
-
-//app
