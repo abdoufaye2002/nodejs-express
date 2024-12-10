@@ -23,3 +23,4 @@ router.patch(
 );
 router.delete("/:id", placesControllers.deletePlace);
 module.exports = router;
+//router
