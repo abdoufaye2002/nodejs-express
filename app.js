@@ -29,9 +29,13 @@ app.use((error, req, res, next) => {
 });
 
 // Connexion à MongoDB et démarrage du serveur
+// mongoose
+//   .connect(
+//     "mongodb+srv://placesUsers:Rci6UkFbs4IuF1N9@cluster0.obgvk.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0"
+//   )
 mongoose
   .connect(
-    "mongodb+srv://placesUsers:Rci6UkFbs4IuF1N9@cluster0.obgvk.mongodb.net/places?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://placesusers:UdXzhvK0bAl04inO@atlascluster.irokdqn.mongodb.net/places?retryWrites=true&w=majority&appName=AtlasCluster"
   )
   .then(() => {
     app.listen(port, () => {
