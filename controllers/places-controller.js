@@ -112,6 +112,15 @@ const updatePlace = async (req, res, next) => {
   }
   place.title = title;
   place.description = description;
+  try {
+    await place.save();
+  } catch (err) {
+    const error = new HttpError(
+      "Un probléme s'est produit,la mise a jour n'a pas pu etre effectuée",
+      500
+    );
+    return next(error);
+  }
   res.status(201).json({ place: place });
 };
 
