@@ -91,15 +91,25 @@ const createPlace = async (req, res, next) => {
   res.status(201).json({ place: createdPlace });
 };
 
-const updatePlace = (req, res, next) => {
+const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(new HttpError("L'entrée est invalide!", 422));
   }
   const { title, description } = req.body;
   const placeId = req.params.id;
-  const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
-  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  // const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
+  // const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId)
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    const error = new HttpError(
+      "Un probleme s'est produit,la mise a jour n'a pas pu etre effectue ",
+      500
+    );
+    return next(error);
+  }
   updatedPlace.title = title;
   updatedPlace.description = description;
   DUMMY_PLACES[placeIndex] = updatedPlace;
