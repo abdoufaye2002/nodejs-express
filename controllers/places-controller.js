@@ -112,7 +112,7 @@ const updatePlace = async (req, res, next) => {
   }
   place.title = title;
   place.description = description;
-  res.status(201).json({ place: Place });
+  res.status(201).json({ place: place });
 };
 
 const deletePlace = (req, res, next) => {
