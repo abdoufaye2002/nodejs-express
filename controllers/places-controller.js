@@ -110,11 +110,9 @@ const updatePlace = async (req, res, next) => {
     );
     return next(error);
   }
-  updatedPlace.title = title;
-  updatedPlace.description = description;
-  DUMMY_PLACES[placeIndex] = updatedPlace;
-  res.status(201).json({ place: updatedPlace });
-  console.log(updatedPlace);
+  place.title = title;
+  place.description = description;
+  res.status(201).json({ place: Place });
 };
 
 const deletePlace = (req, res, next) => {
