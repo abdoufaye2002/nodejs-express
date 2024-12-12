@@ -126,6 +126,14 @@ const updatePlace = async (req, res, next) => {
 
 const deletePlace = (req, res, next) => {
   const placeId = req.params.id;
+  try {
+  } catch (err) {
+    const error = HttpError(
+      "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
+      500
+    );
+    return next(error);
+  }
   res.status(201).json({ message: "Lieu supprimé" });
 };
 
