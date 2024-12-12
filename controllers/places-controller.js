@@ -98,8 +98,6 @@ const updatePlace = async (req, res, next) => {
   }
   const { title, description } = req.body;
   const placeId = req.params.id;
-  // const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
-  // const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId)
   let place;
   try {
     place = await Place.findById(placeId);
