@@ -130,7 +130,7 @@ const deletePlace = async (req, res, next) => {
   try {
     place = await Place.findByIdAndDelete(placeId);
   } catch (err) {
-    const error = HttpError(
+    const error = new HttpError(
       "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
       500
     );
