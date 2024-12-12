@@ -126,7 +126,7 @@ const deletePlace = async (req, res, next) => {
   const placeId = req.params.id;
   let place;
   try {
-    place = await Place.findById(placeId);
+    place = await Place.findByIdAndDelete(placeId);
   } catch (err) {
     const error = new HttpError(
       "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
@@ -134,15 +134,15 @@ const deletePlace = async (req, res, next) => {
     );
     return next(error);
   }
-  try {
-    await Place.remove();
-  } catch (err) {
-    const error = new HttpError(
-      "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
-      500
-    );
-    return next(error);
-  }
+  // try {
+  //   await Place.remove();
+  // } catch (err) {
+  //   const error = new HttpError(
+  //     "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
+  //     500
+  //   );
+  //   return next(error);
+  // }
   res.status(201).json({ message: "Lieu supprimé" });
 };
 
