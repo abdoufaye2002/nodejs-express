@@ -126,12 +126,7 @@ const updatePlace = async (req, res, next) => {
 
 const deletePlace = (req, res, next) => {
   const placeId = req.params.id;
-  if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
-    return next(new HttpError("Lieu non trouvé", 422));
-  }
-  DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
   res.status(201).json({ message: "Lieu supprimé" });
-  console.log(DUMMY_PLACES);
 };
 
 exports.getPlaceById = getPlaceById;
