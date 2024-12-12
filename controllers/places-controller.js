@@ -124,8 +124,9 @@ const updatePlace = async (req, res, next) => {
   res.status(201).json({ place: place.toObject({ getters: true }) });
 };
 
-const deletePlace = (req, res, next) => {
+const deletePlace = async (req, res, next) => {
   const placeId = req.params.id;
+  let place;
   try {
   } catch (err) {
     const error = HttpError(
