@@ -29,7 +29,7 @@ app.use((error, req, res, next) => {
 });
 mongoose
   .connect(
-    "mongodb+srv://placesusers:UdXzhvK0bAl04inO@atlascluster.irokdqn.mongodb.net/places?retryWrites=true&w=majority&appName=AtlasCluster"
+    "mongodb+srv://placesusers:UdXzhvK0bAl04inO@atlascluster.irokdqn.mongodb.net/userplaces?retryWrites=true&w=majority&appName=AtlasCluster"
   )
   .then(() => {
     app.listen(port, () => {

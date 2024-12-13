@@ -17,9 +17,9 @@ const getUsers = (req, res, next) => {
 const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    throw new HttpError("L'entrer est invalide!", 422);
+    return next(new HttpError("L'entrer est invalide!", 422));
   }
-  const { name, email, password } = req.body;
+  const { name, email, password, places } = req.body;
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
