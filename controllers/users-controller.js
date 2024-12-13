@@ -14,21 +14,48 @@ const getUsers = (req, res, next) => {
   res.json({ users: DUMMY_USERS });
 };
 
-const signup = (req, res, next) => {
+const signup = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     throw new HttpError("L'entrer est invalide!", 422);
   }
   const { name, email, password } = req.body;
-  const existingUser = User.findOne({ email: email });
-  const createdUser = {
-    id: uuidv4(),
-    name, // name:name
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError(
+      "L'inscription a echoue,veuillez reessayer plus tard",
+      500
+    );
+    return next(error);
+  }
+  if (existingUser) {
+    const error = new HttpError(
+      "L'utilisateur existe deja,veuiller vous connecter a la place",
+      422
+    );
+    return next(error);
+  }
+  const createdUser = new User({
+    name,
     email,
+    image: `https://picsum.photos/400?random=${Math.floor(
+      Math.random() * 1000
+    )}`, // Générer une URL d'image aléatoire
     password,
-  };
-  DUMMY_USERS.push(createdUser);
-  res.status(201).json({ user: createdUser });
+    places,
+  });
+  try {
+    await createdUser.save(); // Assurez-vous d'attendre cette opération
+  } catch (err) {
+    const error = new HttpError(
+      "Échec de l'inscription, essaie à nouveau!",
+      500
+    );
+    return next(error);
+  }
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
 const login = (req, res, next) => {
