@@ -79,6 +79,23 @@ const createPlace = async (req, res, next) => {
     creator,
   });
 
+  let user;
+  try {
+    user.findById(creator);
+  } catch (err) {
+    const error = new HttpError(
+      "Creaton de lieu echouer,reessayer plus tard",
+      500
+    );
+    return next(error);
+  }
+  if (!user) {
+    const error = new HttpError(
+      "Nous n'avons pas trouver cet utilisateur correspondant a cet Identifiant"
+    );
+    return next(error);
+  }
+  console.log(user);
   try {
     await createdPlace.save(); // Assurez-vous d'attendre cette opération
   } catch (err) {
