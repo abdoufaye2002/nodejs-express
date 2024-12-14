@@ -30,7 +30,7 @@ const signup = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError("L'entrer est invalide!", 422));
   }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
@@ -55,7 +55,7 @@ const signup = async (req, res, next) => {
       Math.random() * 1000
     )}`, // Générer une URL d'image aléatoire
     password,
-    places,
+    places: [],
   });
   try {
     await createdUser.save(); // Assurez-vous d'attendre cette opération

@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require("uuid");
 const { validationResult } = require("express-validator");
 // const getCoordsForAddress = require("../util/location");
 const Place = require("../models/places");
+const User = require("../models/users");
 
 let DUMMY_PLACES = [
   {
@@ -134,15 +135,6 @@ const deletePlace = async (req, res, next) => {
     );
     return next(error);
   }
-  // try {
-  //   await Place.remove();
-  // } catch (err) {
-  //   const error = new HttpError(
-  //     "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
-  //     500
-  //   );
-  //   return next(error);
-  // }
   res.status(201).json({ message: "Lieu supprimé" });
 };
 
