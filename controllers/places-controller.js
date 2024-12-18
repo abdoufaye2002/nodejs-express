@@ -159,5 +159,4 @@ exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
 exports.deletePlace = deletePlace;
-exports.updatePlace = updatePlace;
-//
+exports.updatePlace = updatePlace; //
