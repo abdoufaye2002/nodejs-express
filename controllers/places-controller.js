@@ -81,7 +81,7 @@ const createPlace = async (req, res, next) => {
 
   let user;
   try {
-    user.findById(creator);
+    user = await User.findById(creator);
   } catch (err) {
     const error = new HttpError(
       "Creaton de lieu echouer,reessayer plus tard",
@@ -159,4 +159,4 @@ exports.getPlaceById = getPlaceById;
 exports.getPlacesByUserId = getPlacesByUserId;
 exports.createPlace = createPlace;
 exports.deletePlace = deletePlace;
-exports.updatePlace = updatePlace; //
+exports.updatePlace = updatePlace;
