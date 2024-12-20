@@ -103,6 +103,7 @@ const createPlace = async (req, res, next) => {
     sess.startTransaction();
     await createdPlace.save({ session: sess });
     user.places.push(createdPlace);
+    await user.save({ session: sess });
   } catch (err) {
     const error = new HttpError(
       "Échec de la création de lieu, essaie à nouveau!",
