@@ -6,19 +6,19 @@ const Place = require("../models/places");
 const User = require("../models/users");
 const { default: mongoose } = require("mongoose");
 
-let DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Empiree",
-    description: "lorem upsum elit description",
-    location: {
-      lat: 40.9999,
-      long: -73.9822,
-    },
-    address: "avenue 209",
-    creator: "u1",
-  },
-];
+// let DUMMY_PLACES = [
+//   {
+//     id: "p1",
+//     title: "Empiree",
+//     description: "lorem upsum elit description",
+//     location: {
+//       lat: 40.9999,
+//       long: -73.9822,
+//     },
+//     address: "avenue 209",
+//     creator: "u1",
+//   },
+// ];
 
 const getPlaceById = async (req, res, next) => {
   const placeId = req.params.id;
