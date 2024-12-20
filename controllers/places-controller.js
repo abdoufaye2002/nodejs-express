@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 // const getCoordsForAddress = require("../util/location");
 const Place = require("../models/places");
 const User = require("../models/users");
+const { default: mongoose } = require("mongoose");
 
 let DUMMY_PLACES = [
   {
@@ -97,7 +98,10 @@ const createPlace = async (req, res, next) => {
   }
   console.log(user);
   try {
-    await createdPlace.save(); // Assurez-vous d'attendre cette opération
+    // await createdPlace.save(); // Assurez-vous d'attendre cette opération
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    createPlace.save({ session: sess });
   } catch (err) {
     const error = new HttpError(
       "Échec de la création de lieu, essaie à nouveau!",
