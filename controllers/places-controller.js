@@ -101,7 +101,8 @@ const createPlace = async (req, res, next) => {
     // await createdPlace.save(); // Assurez-vous d'attendre cette opération
     const sess = await mongoose.startSession();
     sess.startTransaction();
-    await createPlace.save({ session: sess });
+    await createdPlace.save({ session: sess });
+    user.places.push(createdPlace);
   } catch (err) {
     const error = new HttpError(
       "Échec de la création de lieu, essaie à nouveau!",
