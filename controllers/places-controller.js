@@ -147,19 +147,69 @@ const updatePlace = async (req, res, next) => {
   res.status(201).json({ place: place.toObject({ getters: true }) });
 };
 
+// const deletePlace = async (req, res, next) => {
+//   const placeId = req.params.id;
+//   let place;
+//   try {
+//     const sess = mongoose.startSession();
+//     (await sess).startTransaction();
+//     place = await Place.findByIdAndDelete(placeId).populate("creator")({
+//       session: sess,
+//     });
+//     place.creator.places.pull(place);
+//     await place.creator.save({ session: sess });
+//   } catch (err) {
+//     const error = new HttpError(
+//       "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
+//       500
+//     );
+//     return next(error);
+//   }
+//   if (!place) {
+//     const error = new HttpError("Lieu non trouvé pour cet identifiant", 404);
+//     return next(error);
+//   }
+//   res.status(201).json({ message: "Lieu supprimé" });
+// };
+
 const deletePlace = async (req, res, next) => {
   const placeId = req.params.id;
+
   let place;
   try {
-    place = await Place.findByIdAndDelete(placeId);
+    // Commencer une session
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+
+    // Trouver le lieu avec son créateur
+    place = await Place.findById(placeId).populate("creator").session(sess);
+    if (!place) {
+      throw new HttpError("Lieu non trouvé pour cet identifiant", 404);
+    }
+
+    // Supprimer le lieu
+    await place.deleteOne({ session: sess });
+
+    // Mettre à jour le créateur en retirant le lieu
+    place.creator.places.pull(place);
+    await place.creator.save({ session: sess });
+
+    // Valider la transaction
+    await sess.commitTransaction();
+    sess.endSession();
   } catch (err) {
+    if (sess) {
+      await sess.abortTransaction(); // Annuler la transaction en cas d'erreur
+      sess.endSession();
+    }
     const error = new HttpError(
-      "Un probleme s'est produit,la mise a jour n'a pas pu etre effectuée",
+      "Un problème s'est produit, la suppression n'a pas pu être effectuée",
       500
     );
     return next(error);
   }
-  res.status(201).json({ message: "Lieu supprimé" });
+
+  res.status(200).json({ message: "Lieu supprimé avec succès" });
 };
 
 exports.getPlaceById = getPlaceById;
