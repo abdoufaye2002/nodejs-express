@@ -38,9 +38,11 @@ const getPlaceById = async (req, res, next) => {
 
 const getPlacesByUserId = async (req, res, next) => {
   const userId = req.params.uid;
-  let places;
+  // let places;
+  let userWithPlaces;
   try {
-    places = await Place.find({ creator: userId });
+    // places = await Place.find({ creator: userId });
+    userWithPlaces = await User.findById(userId).populate("places");
   } catch (err) {
     const error = new HttpError(
       "Createurs non trouver!!(probleme interne) reessai plutard",
@@ -48,12 +50,23 @@ const getPlacesByUserId = async (req, res, next) => {
     );
     return next(error);
   }
-  if (!places || places.length === 0) {
+  // if (!places || places.length === 0) {
+  //   const error = new HttpError("Lieu non trouver", 404);
+  //   return next(error);
+  // }
+  if (
+    !userWithPlaces ||
+    !userWithPlaces.places ||
+    userWithPlaces.places.length === 0
+  ) {
     const error = new HttpError("Lieu non trouver", 404);
     return next(error);
   }
   res.json({
-    places: places.map((place) => place.toObject({ getters: true })),
+    // places: places.map((place) => place.toObject({ getters: true })),
+    places: userWithPlaces.places.map((place) =>
+      place.toObject({ getters: true })
+    ),
   });
 };
 
@@ -176,13 +189,15 @@ const deletePlace = async (req, res, next) => {
   const placeId = req.params.id;
 
   let place;
+  let sess;
   try {
     // Commencer une session
-    const sess = await mongoose.startSession();
+    sess = await mongoose.startSession();
     sess.startTransaction();
 
     // Trouver le lieu avec son créateur
     place = await Place.findById(placeId).populate("creator").session(sess);
+    console.log(place);
     if (!place) {
       throw new HttpError("Lieu non trouvé pour cet identifiant", 404);
     }
